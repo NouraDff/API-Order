@@ -1,6 +1,6 @@
 import os
-import click   
-import sqlite3 
+import click
+import sqlite3
 from flask.cli import with_appcontext
 from peewee import Model, SqliteDatabase, AutoField, CharField, IntegerField, BooleanField
 
@@ -10,17 +10,34 @@ def get_db_path():
 class BaseModel(Model):
     class Meta:
         database = SqliteDatabase(get_db_path())
-    
+
 class Product(BaseModel):
     id = AutoField(primary_key=True)
     name = CharField()
     in_stock = BooleanField()
     description = CharField()
     price = IntegerField()
-    image = CharField() 
+    image = CharField()
 
     def __str__(self):
         return self.name
+
+class Order(BaseModel):
+    id = AutoField(primary_key=True)
+    total_price = IntegerField()
+    email = CharField()
+    #credit_card = 
+    #shipping_information = 
+    paid = BooleanField()
+    #transaction = 
+    #Product
+    shipping_price = IntegerField()
+
+
+
+
+
+
 
 @click.command("init-db")
 @with_appcontext
