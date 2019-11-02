@@ -18,6 +18,7 @@ class Product(BaseModel):
     in_stock = BooleanField()
     description = CharField()
     price = IntegerField()
+    weight = IntegerField()
     image = CharField()
 
 class CreditCard(BaseModel):

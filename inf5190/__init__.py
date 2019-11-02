@@ -50,10 +50,7 @@ def create_app(initial_config=None):
     @app.route('/order', methods=['POST'])
     def post_product():
         if request.headers['Content-Type'] == 'application/json':
-
-            id =  request.json['product']['id']
-            qty =  request.json['product']['quantity']
-            order = Product.select().where(Product.id == id).get()
+            order = Product.select().where(Product.id == request.json['product']['id']).get()
             product = model_to_dict(order)
             if(product['in_stock'] == True):
                 price = product['price']*2
@@ -80,17 +77,35 @@ def create_app(initial_config=None):
     
 
 
-    @app.route('/order/<int:order_id>', methods=['POST', 'GET'])
+    @app.route('/order/<int:order_id>', methods=['GET', 'PUT'])
     def get_product(order_id):
         if request.method == 'GET':
             order = Order.select().where(Order.id == order_id).get()
-            the_order = model_to_dict(order)
-          
+            order = model_to_dict(order)
+            
+            product_id = order['product']['id']
+            product = Product.select().where(Product.id == product_id).get() 
+            product = model_to_dict(product)
 
+            weight = product['weight']
+            if(weight <= 500):
+                order['shipping_price'] = 500
+            elif(weight <= 2000):
+                order['shipping_price'] = 1000
+            else:
+                order['shipping_price'] = 2500
+          
+        if request.method == 'PUT': 
+            query = Order.update(request.json['order']).where(Order.id == order_id)
+            query.execute()
+            order = Order.select().where(Order.id == order_id).get()
+            order = model_to_dict(order)
+             
+            
 
 
         dict_order = {}
-        dict_order['order'] = the_order
+        dict_order['order'] = order
 
         return dict_order
     
