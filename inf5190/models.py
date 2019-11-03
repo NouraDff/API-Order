@@ -21,31 +21,11 @@ class Product(BaseModel):
     weight = IntegerField()
     image = CharField()
 
-class CreditCard(BaseModel):
-    id=AutoField(primary_key=True)
-    name = CharField()
-    number = IntegerField()
-    expiration_year = IntegerField()
-    cvv = IntegerField()
-    expiration_month = IntegerField()
-
-class ShippingInformation(BaseModel):
-    id=AutoField(primary_key=True)
-    country = CharField()
-    address = CharField()
-    postal_code = CharField()
-    city = CharField()
-    province = CharField()
-
-class Transaction(BaseModel):
-    id = AutoField(primary_key=True)
-    success = BooleanField()
-    amount_charged = IntegerField()
 
 class Order(BaseModel):
     id = AutoField(primary_key=True, column_name = "id")
     total_price = IntegerField()
-    email = CharField()
+    email = CharField(null = True)
     credit_card = JSONField()
     shipping_information = JSONField()
     paid = BooleanField()
@@ -59,7 +39,7 @@ class Order(BaseModel):
 @with_appcontext
 def init_db_command():
     database = SqliteDatabase(get_db_path())
-    database.create_tables([Product, CreditCard, ShippingInformation, Transaction, Order])
+    database.create_tables([Product, Order])
     click.echo("Initialized the database")
 
 def init_app(app):
