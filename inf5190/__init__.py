@@ -158,27 +158,25 @@ def create_app(initial_config=None):
                 else message error
         """ 
         try:
-            order_db = Order.select().where(Order.id == order_id).get()
-            if 'order' in request.json:
-                verify_missing_field(request.json)
-            elif 'credit_card' in request.json:
-                dict_order = {}
-                dict_order['order'] = model_to_dict(order_db)
-                verify_missing_field(dict_order)
+            order_db = Order.select().where(Order.id == order_id).get()                
         except DoesNotExist:
             return Response(json.dumps({'errors': {
                 'order' : {
                 'code' : '404',
                 'name' : "Not Found - La commande n'existe pas"
                 }}}, ensure_ascii=False), status=404)
-        except (Exception, KeyError):
-            return Response(json.dumps({'errors': {
-                'order' : {
-                'code' : 'missing-fields',
-                'name' : "Il manque un ou plusieurs champs qui sont obligatoire"
-                }}}, ensure_ascii=False), status=422)
+    
         
         if 'order' in request.json:  
+            try: 
+                 verify_missing_field(request.json)
+            except (Exception, KeyError):
+                return Response(json.dumps({'errors': {
+                    'order' : {
+                    'code' : 'missing-fields',
+                    'name' : "Il manque un ou plusieurs champs qui sont obligatoire"
+                    }}}, ensure_ascii=False), status=422)
+
             order_db.email = request.json['order']['email']
             order_db.shipping_information = request.json['order']['shipping_information']
             order_db.save()
@@ -186,13 +184,28 @@ def create_app(initial_config=None):
             return add_key_order_to_json(order)
 
         elif 'credit_card' in request.json:
+            try:
+                dict_order = {}
+                dict_order['order'] = model_to_dict(order_db)
+                verify_missing_field(dict_order)
+            except (Exception, KeyError):
+                return Response(json.dumps({"errors" : {
+                    "order": {
+                    "code": "missing-fields",
+                    "name": "Les informations du client sont nécessaire avant d'appliquer une carte de crédit"
+                    }}}, ensure_ascii=False), status=422)
+
+
+
+
+
             order = model_to_dict(order_db)      
             request.json["amount_charged"] = order['shipping_price'] + order['total_price']
             try:
                confirmation = post_payment_api()
             except HTTPError as error:
                 data = json.load(error)
-                return data
+                return Response(json.dumps(data, ensure_ascii=False), mimetype='application/json', status=422)
                  
             if confirmation['transaction']['success'] == True :
                 order_db.credit_card = confirmation['credit_card']

@@ -34,6 +34,18 @@ class TestRoutes(object):
         with app.app_context():
             client.get("/")
             client.post("/order", json={ "product": { "id": 1248, "quantity": 2 } })
+            response = client.put("/order/1", json = {"credit_card" : {
+                                                            "name" : "John Doe",
+                                                            "number" : "4242 4242 4242 4242",
+                                                            "expiration_year" : 2024,
+                                                            "cvv" : "123",
+                                                            "expiration_month" : 9
+                                                            }
+                                                            })
+            assert response.status_code == 422
+            assert json.loads(response.data) == dict({"errors": 
+            {"order": {"code": "missing-fields", "name": "Les informations du client sont nécessaire avant d'appliquer une carte de crédit"}}})
+
             response = client.put("/order/1", json = {"order" : {
                                                     "email" : "nouradjaffri@gmail.com",
                                                     "shipping_information" : {
@@ -83,4 +95,39 @@ class TestRoutes(object):
                                                     }
                                                     })
             assert response.status_code == 404
-            
+            response = client.put("/order/1", json = {"credit_card" : {
+                                                    "name" : "John Doe",
+                                                    "number" : "4242 4242 4242 4242",
+                                                    "expiration_year" : 2024,
+                                                    "cvv" : "1234",
+                                                    "expiration_month" : 9
+                                                    }
+                                                    })
+            assert response.status_code == 422
+            response = client.put("/order/1", json = {"credit_card" : {
+                                                    "name" : "John Doe",
+                                                    "number" : "4242 4242 4242 4242",
+                                                    "expiration_year" : 2018,
+                                                    "cvv" : "123",
+                                                    "expiration_month" : 9
+                                                    }
+                                                    })
+            assert response.status_code == 422
+            response1 = client.put("/order/1", json = {"credit_card" : {
+                                                    "name" : "John Doe",
+                                                    "number" : "4000 0000 0000 0002",
+                                                    "expiration_year" : 2024,
+                                                    "cvv" : "123",
+                                                    "expiration_month" : 9
+                                                    }
+                                                    })
+            assert response1.status_code == 422
+            response = client.put("/order/1", json = {"credit_card" : {
+                                                    "name" : "John Doe",
+                                                    "number" : "4242 4242 4242 4242",
+                                                    "expiration_year" : 2024,
+                                                    "cvv" : "123",
+                                                    "expiration_month" : 9
+                                                    }
+                                                    })
+            assert response.status_code == 200
