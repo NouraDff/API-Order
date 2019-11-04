@@ -20,4 +20,14 @@ Pour lancer le site web suffit de lancer cette commande :
 ```
 $ FLASK_DEBUG=True FLASK_APP=inf5190 flask run
 ```
+L'application web se retrouvera à cette addresse: [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+
+
+
+## Tests
+Pour lancer les test il suffit de lancer cette commande :
+
+```
+$ python3 -m pytest tests/
+```
 
