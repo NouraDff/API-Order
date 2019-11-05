@@ -1,5 +1,7 @@
 # Projet de session
 
+Ce projet permet de gérer le paiement d'une commande. 
+
 ## Installation
 
 Installer les pakages nécessaire suivant : 

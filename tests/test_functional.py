@@ -15,9 +15,13 @@ class TestRoutes(object):
     def test_post_order_redirection(self, app, client):
         with app.app_context():
             client.get("/")
-            response1 = client.post("/order", json={ "product": { "id": 1248, "quantity": 2 } })
-            assert response1.status_code == 302
+            response = client.post("/order", json={ "product": { "id": 1248, "quantity": 2 } })
+            assert response.status_code == 302
+            response = client.post("/order", json={ "product": { "id": 1232, "quantity": 2 } })
+            assert response.status_code == 422
             response2 = client.post("/order", json={ "product": { "id": 12488, "quantity": 2 } })
+            assert response2.status_code == 422
+            response2 = client.post("/order", json={ "product": { "quantity": 2 } })
             assert response2.status_code == 422
 
     def test_get_order_by_id(self, app, client):

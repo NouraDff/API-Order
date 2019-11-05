@@ -195,10 +195,6 @@ def create_app(initial_config=None):
                     "name": "Les informations du client sont nécessaire avant d'appliquer une carte de crédit"
                     }}}, ensure_ascii=False), status=422)
 
-
-
-
-
             order = model_to_dict(order_db)      
             request.json["amount_charged"] = order['shipping_price'] + order['total_price']
             try:
