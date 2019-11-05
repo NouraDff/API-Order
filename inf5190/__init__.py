@@ -19,10 +19,8 @@ def create_app(initial_config=None):
     @app.route('/',  methods=['GET'])
     def index():
         """Returns a list of product in a json format
-
         Data are retrieve from the external api "https://caissy.dev/shops/products" and saved in the database.
         If data are already saved in the database we then retrieve the data from there. 
-
         Return : json of the products
         """
         if(Product.select().count() <= 0):
@@ -49,10 +47,8 @@ def create_app(initial_config=None):
     @app.route('/order', methods=['POST'])
     def post_product():
         """Return a redirection to the newly created order
-
         This function will first check if the data send by the POST request are complete 
         and then will create a new order in the database if the product is not out of stock.
-
         Return : redirect to order/<order_id> 
                  else error message in json format
         """
@@ -98,10 +94,8 @@ def create_app(initial_config=None):
     def get_order(order_id):
         """Returns the order as dict     
         The function will calculate shipping_price if not already saved in the db. 
-
         Paramater: 
             order_id(int): id of the order
-
         Return: order(json): the order retrieved from the database
         """    
         try:
@@ -123,27 +117,6 @@ def create_app(initial_config=None):
        
         return add_key_order_to_json(order)
 
-
-    def calculate_shipping_price(order):
-        """Returns the calculated shipping price based en the weigth and the quantity. 
-        
-        Parameter:
-            order(dict): the order retrieved from the database in which we calculate shipping_price.
-        
-        Return: shipping_price(int): the value of the shipping price.  
-        """
-        product_id = order['product']['id']
-        product = Product.select().where(Product.id == product_id).get() 
-        product = model_to_dict(product)
-        weight = product['weight'] * order['product']['quantity']
-        if(weight <= 500):
-            order['shipping_price'] = 500
-        elif(weight <= 2000):
-            order['shipping_price'] = 1000
-        else:
-            order['shipping_price'] = 2500
-        return order['shipping_price']
-            
 
     @app.route('/order/<int:order_id>', methods=['PUT'])
     def edit_order(order_id):
@@ -211,6 +184,25 @@ def create_app(initial_config=None):
                         
             return add_key_order_to_json(model_to_dict(order_db))       
         
+    
+    def calculate_shipping_price(order):
+        """Returns the calculated shipping price based en the weigth and the quantity. 
+        Parameter:
+            order(dict): the order retrieved from the database in which we calculate shipping_price.
+        Return: shipping_price(int): the value of the shipping price.  
+        """
+        product_id = order['product']['id']
+        product = Product.select().where(Product.id == product_id).get() 
+        product = model_to_dict(product)
+        weight = product['weight'] * order['product']['quantity']
+        if(weight <= 500):
+            order['shipping_price'] = 500
+        elif(weight <= 2000):
+            order['shipping_price'] = 1000
+        else:
+            order['shipping_price'] = 2500
+        return order['shipping_price']
+            
 
     def post_payment_api():
         """Return the response of the call to the external api. 
