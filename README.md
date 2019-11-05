@@ -2,6 +2,7 @@
 
 Ce projet est une API qui permet de gérer le paiement d'une commande.  
 
+
 ## Installation
 
 Installer les pakages nécessaire suivant : 
@@ -32,4 +33,8 @@ Pour lancer les test il suffit de lancer cette commande :
 ```
 $ python3 -m pytest tests/
 ```
+
+## Auteure
+Noura Djaffri
+DJAN28569508
 
