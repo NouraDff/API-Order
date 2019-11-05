@@ -34,7 +34,7 @@ def create_app(initial_config=None):
             jsonObject = json.loads(response)
             for d in jsonObject['products']:
                 Product.create(**d)
-            return Response(json.dumps(jsonObject, ensure_ascii=False), mimetype='application/json')   
+            return Response(json.dumps(jsonObject, ensure_ascii=False, indent=4), mimetype='application/json')   
 
         #if data are already saved in the db we retrieved them     
         else:

@@ -6,7 +6,7 @@ Ce projet permet de gérer le paiement d'une commande.
 
 Installer les pakages nécessaire suivant : 
 ```
-$ pip install flask pytest pytest-flask peewee
+$ pip3 install flask pytest pytest-flask peewee
 ```
 
 Ensuite, il faut initialiser la base de donnée en utilisant la ligne de commande suivante : 
