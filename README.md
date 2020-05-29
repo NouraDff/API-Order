@@ -5,10 +5,39 @@ Ce projet est une API qui permet de gérer le paiement d'une commande.
 
 ## Installation
 
-Installer les pakages nécessaire suivant : 
+
+### Créer l'environnement virtuelle
+
+Cela permet d'isoler notre environnement de développement lorsque l'on va installer les librairie nécessaire, etc. 
+
+1. Créer un dossier env
+   ```
+   > mkdir env
+   ```
+2. Créer l'environnement virtuelle
+   ```
+   > virtualenv -p python3 env
+   ```
+3. Activer l'environnement virtuelle
+   ```
+   > source env/bin/activate
+   ```
+
+4. Pour désactiver l'environnement
+   ```
+    > deactivate
+   ```
+
+
+### Installer les pakages 
+
+Se placer dans le dossier inf5190/ avant de lancer cette commande. (Ensuite retourner à la racine du projet pour la suite)
+ 
 ```
-$ pip3 install flask pytest pytest-flask peewee
+$ pip3 install -r requirements.txt
 ```
+
+### Créer la base de donnée
 
 Ensuite, il faut initialiser la base de donnée en utilisant la ligne de commande suivante : 
  ```

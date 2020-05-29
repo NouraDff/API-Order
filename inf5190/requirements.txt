@@ -1,0 +1,4 @@
+Flask
+peewee
+pytest
+pytest-flask
