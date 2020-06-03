@@ -19,13 +19,13 @@ def create_app(initial_config=None):
     @app.route('/',  methods=['GET'])
     def index():
         """Returns a list of product in a json format
-        Data are retrieve from the external api "https://caissy.dev/shops/products" and saved in the database.
+        Data are retrieve from the external api "https://nouradff.github.io/products/" and saved in the database.
         If data are already saved in the database we then retrieve the data from there. 
         Return : json of the products
         """
         if(Product.select().count() <= 0):
             #get products
-            url = "https://caissy.dev/shops/products"
+            url = "https://nouradff.github.io/products/"
             response = urlopen(url).read()
             
             #Save data to database           
