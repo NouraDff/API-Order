@@ -1,0 +1,83 @@
+FORMAT: 1A
+HOST: http://127.0.0.1:5000
+
+# Noura Djaffri
+
+Polls is a simple API allowing consumers to view polls and vote in them.
+
+## Questions Collection [/]
+
+### List All Questions [GET]
+
++ Response 200 (application/json)
+
+        [
+           {
+             "products": [
+                {
+                    "id": 123,
+                    "name": "Hapiness Bottle",
+                    "in_stock": true,
+                    "description": "An incredible bottle filled with happiness and joy. One of a kind!",
+                    "price": 5999,
+                    "weight": 450,
+                    "image": "http://caissy.dev/shops/images/image.png"
+                },
+                {
+                    "id": 456,
+                    "name": "Flying Squirrel Limited Edition",
+                    "in_stock": false,
+                    "description": "A limited edition special Flying Squirrel. Hurry up, it won't last long!",
+                    "price": 3149,
+                    "weight": 220,
+                    "image": "http://caissy.dev/shops/images/image.png"
+                }
+            ]
+}
+        ]
+
+### Create a New Question [POST]
+
+You may create your own question using this action. It takes a JSON
+object containing a question and a collection of answers in the
+form of choices.
+
++ Request (application/json)
+
+        {
+            "question": "Favourite programming language?",
+            "choices": [
+                "Swift",
+                "Python",
+                "Objective-C",
+                "Ruby"
+            ]
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /questions/2
+
+    + Body
+
+            {
+                "question": "Favourite programming language?",
+                "published_at": "2015-08-05T08:40:51.620Z",
+                "choices": [
+                    {
+                        "choice": "Swift",
+                        "votes": 0
+                    }, {
+                        "choice": "Python",
+                        "votes": 0
+                    }, {
+                        "choice": "Objective-C",
+                        "votes": 0
+                    }, {
+                        "choice": "Ruby",
+                        "votes": 0
+                    }
+                ]
+            }
